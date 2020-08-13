@@ -1,0 +1,32 @@
+---
+# tasks file for flask_app
+
+- name: update apt cache
+  apt: update_cache=yes cache_valid_time=3600
+
+- name: ensure git is at the latest version
+  apt: name={{ item }} state=latest
+  loop:
+    - git
+    - python-pip
+
+- name: checkout git code
+  git:
+    repo: https://github.com/fromzeroedu/my-simple-flask-app.git
+    dest: /opt/flask_app
+
+- name: copy system template
+  template:
+    src: app.conf
+    dest: /etc/init
+  notify: restart app
+
+- name: install pip dependencies
+  pip:
+    requirements: /opt/flask_app/requirements.txt
+  notify: restart app
+
+- name: start app
+  service:
+    name: app
+    state: started

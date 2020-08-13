@@ -1,0 +1,7 @@
+---
+- name: setup app
+  hosts: all
+  become: yes
+  roles:
+    - nginx
+    - flask_app

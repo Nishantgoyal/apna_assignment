@@ -1,0 +1,7 @@
+---
+# handlers file for flask_app
+
+- name: restart app
+  service:
+    name: app
+    state: restarted
